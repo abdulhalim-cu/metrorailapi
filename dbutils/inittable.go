@@ -5,7 +5,7 @@ import (
 	"log"
 )
 
-func initialize(dbDriver *sql.DB) {
+func Initialize(dbDriver *sql.DB) {
 	stmt, err := dbDriver.Prepare(train)
 	if err != nil {
 		log.Println(err)
