@@ -100,10 +100,20 @@ func (t TrainResource) deleteTrain(request *restful.Request, response *restful.R
 
 func main() {
 
-	db, err := sql.Open("sqlite3", "./rainapi.db")
+	var err error
+	DB, err = sql.Open("sqlite3", "./railapi.db")
 	if err != nil {
 		log.Println("Driver creation failed!")
 	}
-	dbutils.Initialize(db)
+	dbutils.Initialize(DB)
 
+	wsContainer := restful.NewContainer()
+	wsContainer.Router(restful.CurlyRouter{})
+
+	t := TrainResource{}
+	t.Register(wsContainer)
+
+	log.Printf("start listening on localhost:8000")
+	server := &http.Server{Addr: ":8000", Handler: wsContainer}
+	log.Fatal(server.ListenAndServe())
 }
